@@ -8,6 +8,7 @@
 , systemd
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withPpp ? stdenv.hostPlatform.isLinux
+, disableProc ? stdenv.hostPlatform != stdenv.buildPlatform
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd";
+  ++ lib.optional disableProc "--disable-proc";
 
   enableParallelBuilding = true;
 
